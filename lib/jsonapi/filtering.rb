@@ -23,6 +23,10 @@ module JSONAPI
         predicates << Ransack::Predicate.named(predicate)
       end
 
+      unless predicates.present? || Ransack.options[:ignore_unknown_conditions]
+        raise ActionController::BadRequest, "No valid predicates for #{requested_field}"
+      end
+
       [field_name.split(/_and_|_or_/), predicates.reverse]
     end
 
